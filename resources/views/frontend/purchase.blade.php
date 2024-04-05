@@ -62,15 +62,15 @@
 <section>
     <div class="container">
         <div class="row">
-            <div class="col-lg-9 offset-3">
+            <div class="col-lg-5 offset-3">
                 <div class="card" style="background: #22D4C4;margin-bottom: 60px;">
                     <div class="card-body">
                         <form action="{{route('checkout')}}" method="POST">
                             <div class="row">
                                 {{ csrf_field() }}
-                                <div class="col-8">
+                                <div class="col-12">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-12">
                                             <div class="form-group">
                                                 <label for="amount">Tokens:</label>
                                                 <select onchange="handleChange(this)" class="form-control" id="amount" name="amount" required>
@@ -81,14 +81,14 @@
                                                     <option value="40">4000</option>
                                                 </select>
                                             </div>
+                                            <div class="col-12 pt-5">
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <h2 class="text-light text-bold">Amount</h2>
+                                                    <h2 class="text-light text-bold" id="amount_val">$50</h2>
+                                                    <input id="token_val" type="hidden" name="tokens">
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-4 pt-5">
-                                    <div class="d-flex flex-column align-items-center">
-                                        <h2>Amount</h2>
-                                        <h2 id="amount_val">$50</h2>
-                                        <input id="token_val" type="hidden" name="tokens">
                                     </div>
                                 </div>
                             </div>

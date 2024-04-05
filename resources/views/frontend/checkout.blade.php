@@ -68,8 +68,10 @@
                         <form id="payment-form">
                             <input type="hidden" id="secret" value="{{$clientSecret}}">
                             <input type="hidden" id="payment_success_url" value="{{$url}}">
-                            <h2>Amount: ${{Session::get('amount')}}</h2>
-                            <h2>Tokens: {{Session::get('tokens')}}</h2>
+                            <div class="d-flex justify-content-between py-3">
+                                <h2 class="text-light text-bold">Amount: ${{Session::get('amount')}}</h2>
+                                <h2 class="text-light text-bold">Tokens: {{Session::get('tokens')}}</h2>
+                            </div>
                             <div id="payment-element">
                                 <!--Stripe.js injects the Payment Element-->
                             </div>
