@@ -21,52 +21,45 @@
             </div>
         </div>
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                        </p>
+                        <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('users.get') }}" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>
-                        <p>
-                            Users
-                        </p>
+                        <p>Users</p>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a href="{{ route('payment_log') }}" class="nav-link">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>Payment Log</p>
+                    </a>
+                </li>
                 @if (Auth::user()->role == 'Admin')
                     <li class="nav-item">
                         <a href="{{ route('allowed_users.get') }}" class="nav-link">
                             <i class="nav-icon fas fa-user"></i>
-                            <p>
-                                Allowed Users
-                            </p>
+                            <p>Allowed Users</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('token.get') }}" class="nav-link">
                             <i class="nav-icon fas fa-key"></i>
-                            <p>
-                                Token Setting
-                            </p>
+                            <p>Token Setting</p>
                         </a>
                     </li>
                 @endif
                 <li class="nav-item">
                     <a href="{{ route('admin.logout') }}" class="nav-link">
                         <i class="nav-icon fas fa-sign-out-alt"></i>
-                        <p>
-                            Logout
-                        </p>
+                        <p>Logout</p>
                     </a>
                 </li>
-
             </ul>
         </nav>
     </div>

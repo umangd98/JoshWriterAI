@@ -1,15 +1,13 @@
 <?php
-
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AllowedUsersController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ChatGptController;
 use App\Http\Controllers\CSVController;
 use App\Http\Controllers\GoogleController;
-use App\Http\Controllers\GoogleSheetsController;
+use App\Http\Controllers\StripeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,9 +18,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
-
 Route::get('/login', [AuthController::class, 'ShowLoginPage'])->name('login');
 Route::post('/post-login', [AuthController::class, 'Authenticate'])->name('Authenticate');
 Route::get('/signup', [AuthController::class, 'ShowSignupPage'])->name('signup');
@@ -31,15 +26,15 @@ Route::get('/forget-password', [AuthController::class, 'ShowForgetPasswordPage']
 Route::post('/post-forget-password', [AuthController::class, 'PostForgetPassword'])->name('PostForgetPassword');
 Route::get('/verify-account', [AuthController::class, 'VerifyUser'])->name('VerifyUser');
 Route::post('/post-verify-account', [AuthController::class, 'PostVerifyUser'])->name('PostVerifyUser');
-
 Route::get('/resend-code', [AuthController::class, 'ResendCode'])->name('ResendCode');
-
 Route::get('/m', [AuthController::class, 'ComposerCall']);
 Route::get('/mr', [AuthController::class, 'ComposerCallR']);
-
 Route::middleware('VerifyAccount')->group(function () {
     Route::group(['middleware' => 'auth:web'], function () {
         Route::get('/', [AuthController::class, 'ShowHomePage'])->name('Home');
+        Route::get('/purchase', [StripeController::class, 'purchase'])->name('purchase');
+        Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');
+        Route::get('/payment_confirmed', [StripeController::class, 'payment_confirmed'])->name('payment_confirmed');
         Route::get('/home', [AuthController::class, 'ShowHomePage']);
         Route::get('/history', [AuthController::class, 'history'])->name('history');
         Route::get('/history/{id}', [AuthController::class, 'historyByID'])->name('historyByID');
@@ -49,16 +44,9 @@ Route::middleware('VerifyAccount')->group(function () {
         Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 });
-
-
-
-
 Route::get('auth/social', [GoogleController::class, 'show'])->name('social.login');
 Route::get('oauth/{google}', [GoogleController::class, 'redirectToProvider'])->name('social.oauth');
 Route::get('/auth/{google}/callback/', [GoogleController::class, 'handleProviderCallback'])->name('social.callback');
-
-
-
 Route::prefix('admin')->group(function () {
     Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
     Route::middleware('SecureAdmin')->group(function () {
@@ -68,22 +56,17 @@ Route::prefix('admin')->group(function () {
         Route::get('/clear-cache', [AdminController::class, 'clearcache'])->name('clearcache');
         Route::group(['middleware' => 'auth:web'], function () {
             Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
             Route::prefix('users')->group(function () {
                 Route::get('/get', [UserController::class, 'get'])->name('users.get');
                 Route::post('/store', [UserController::class, 'store'])->name('users.store');
-
                 Route::get('/histories/{id}', [UserController::class, 'histories'])->name('users.histories');
                 Route::get('/history-by-id/{id}', [UserController::class, 'historyById'])->name('users.historyById');
-
                 Route::get('/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
-
                 Route::post('/update-token/{id}', [UserController::class, 'updateToken'])->name('users.updateToken');
-
                 Route::post('/post-edit', [UserController::class, 'postEdit'])->name('users.postEdit');
                 Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('users.delete');
             });
-
+            Route::get('/payment_log', [StripeController::class, 'payment_log'])->name('payment_log');
             Route::prefix('allowed-users')->group(function () {
                 Route::get('/get', [AllowedUsersController::class, 'get'])->name('allowed_users.get');
                 Route::post('/store', [AllowedUsersController::class, 'store'])->name('allowed_users.store');
